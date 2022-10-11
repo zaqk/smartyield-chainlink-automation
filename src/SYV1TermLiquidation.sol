@@ -4,10 +4,10 @@ pragma solidity ^0.8.15;
 import {AutomationCompatible} from "chainlink/AutomationCompatible.sol";
 import {Owned} from "solmate/auth/Owned.sol";
 
-import {ISmartYield} from "./external/ISmartYield.sol";
+import {ISmartYield} from "./external/ISmartYield.v1.sol";
 
-/// @title SmartYieldTermLiquidation
-contract SmartYieldTermLiquidationV1 is AutomationCompatible, Owned {
+/// @title Smart Yield V1 Term Liquidation
+contract SYV1TermLiquidation is AutomationCompatible, Owned {
 
   mapping (address => bool) whitelist;
 
