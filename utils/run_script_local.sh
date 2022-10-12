@@ -10,20 +10,12 @@ anvil --fork-url $RPC_URL &
 # Wait for anvil to fork
 sleep 5
 
-# Read script
-echo Which script do you want to run?
-read script
-
-# Read script arguments
-echo Enter script arguments, or press enter if none:
-read -ra args
-
 # Run the script
-echo Running Script: $script...
+echo Running Script:
 
 # We specify the anvil url as http://localhost:8545
 # We need to specify the sender for our local anvil node
-forge script $script \
+forge script script/DeploySYV1.s.sol:DeploySYV1 --sig "run()(address)"\
     --fork-url http://localhost:8545 \
     --broadcast \
     -vvvv \
