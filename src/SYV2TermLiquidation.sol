@@ -9,38 +9,65 @@ import {ISmartYield} from "./external/ISmartYield.v2.sol";
 /// @title Smart Yield  V2 Term Liquidation
 contract SYV2TermLiquidation is AutomationCompatible, Owned {
   ISmartYield public smartYield;
-  mapping (address => bool) whitelist;
+  address[] providers;
 
   constructor(ISmartYield _smartYield, address _owner) Owned(_owner) {
     smartYield = _smartYield;
   }
 
-  function checkUpkeep(bytes calldata checkData) external cannotExecute returns (
+  function checkUpkeep(bytes calldata) external cannotExecute returns (
     bool upkeepNeeded,
     bytes memory performData
   ) {
-    (address provider) = abi.decode(checkData, (address));
-    require(whitelist[provider], "Not whitelisted");
-    (,,,address activeTerm,,) = smartYield.poolByProvider(provider);
-    (,uint256 end,,,,,bool liquidated) = smartYield.getTermInfo(activeTerm);
-    
+    address[] memory termsToLiquidate;
+
+    // iterate through providers and check for terms that can be liquidated
+    uint256 totalProviders = providers.length;
+    for (uint256 i; i < totalProviders; i++) {
+      address provider = providers[i];
+      (,,,address activeTerm,,) = smartYield.poolByProvider(provider);
+      (,uint256 end,,,,,bool liquidated) = smartYield.getTermInfo(activeTerm);
+
+      // check if term can be liquidated
+      if (block.timestamp > end && !liquidated) {
+        termsToLiquidate[termsToLiquidate.length - 1] = activeTerm;
+      }
+    }
+
     return (
-      block.timestamp > end && !liquidated,
-      abi.encode(activeTerm)
+      termsToLiquidate.length > 0,
+      abi.encode(termsToLiquidate)
     );
   }
 
   function performUpkeep(bytes calldata performData) external {
-    (address activeTerm) = abi.decode(performData, (address));
-    smartYield.liquidateTerm(activeTerm);
+    address[] memory termsToLiquidate = abi.decode(performData, (address[]));
+
+    // iterate through each term in perform data and liquidate
+    uint256 totalTermsToLiquidate = termsToLiquidate.length;
+    for (uint256 i; i < totalTermsToLiquidate; i++) {
+      smartYield.liquidateTerm(termsToLiquidate[i]);
+
+    }
+
   }
 
   function addProvider(address _provider) external onlyOwner {
-    whitelist[_provider] = true;
+    providers.push(_provider);
   }
 
   function removeProvider(address _provider) external onlyOwner {
-    whitelist[_provider] = false;
+    uint256 totalProviders = providers.length;
+    for (uint256 i; i < totalProviders; i++) {
+
+      if (providers[i] == _provider) {
+
+        // replace provider with provider at end of list to delete
+        address lastProvider = providers[totalProviders - 1];
+        providers[i] = lastProvider;
+        providers.pop();
+      }
+    }
   }
 
 }
