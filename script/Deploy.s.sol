@@ -7,7 +7,7 @@ import {Script} from 'forge-std/Script.sol';
 contract Deploy is Script {
 
   /// @notice The main script entrypoint
-  /// @return greeter The deployed contract
-  function run() external {
+  /// @return contract
+  function run() external returns (bool) {
   }
 }
