@@ -9,39 +9,63 @@ import {ISmartYield} from "./external/ISmartYield.v1.sol";
 /// @title Smart Yield V1 Term Liquidation
 contract SYV1TermLiquidation is AutomationCompatible, Owned {
 
-  mapping (address => bool) whitelist;
+  address[] public instances;
 
-  constructor(address _owner) Owned(_owner) {}
+  constructor(address _owner) Owned(_owner) { }
 
-  function checkUpkeep(bytes calldata checkData) external cannotExecute returns (
+  function checkUpkeep(bytes calldata) external cannotExecute returns (
     bool upkeepNeeded,
     bytes memory performData
   ) {
-    (address smartYieldAddr) = abi.decode(checkData, (address));
-    require(whitelist[smartYieldAddr], "Not whitelisted");
-    
-    ISmartYield smartYield = ISmartYield(smartYieldAddr);
-    address term = smartYield.activeTerm();
-    (,uint256 end,,,,,bool liquidated) = smartYield.bondData(term);
-    
+    uint256[] memory indexesToUpKeep;
+
+    // iterate through each smart yield instance and check if they can
+    // be liquidated. If they can be liquidated add them to array.
+    uint256 totalInstances = instances.length;
+    for (uint256 i; i < totalInstances; i++) {
+      
+      // load smart yield data
+      ISmartYield smartYield = ISmartYield(instances[i]);
+      address term = smartYield.activeTerm();
+      (,uint256 end,,,,,bool liquidated) = smartYield.bondData(term);
+      
+      // check if smart yield instance can be liquidated, add to array
+      if (block.timestamp > end && !liquidated) {
+        indexesToUpKeep[indexesToUpKeep.length - 1] = i;
+      }
+    }
+
     return (
-      block.timestamp > end && !liquidated,
-      abi.encode(smartYieldAddr)
+      indexesToUpKeep.length > 0,
+      abi.encode(indexesToUpKeep)
     );
   }
 
   function performUpkeep(bytes calldata performData) external {
-    (address smartYieldAddr) = abi.decode(performData, (address));
-    ISmartYield smartYield = ISmartYield(smartYieldAddr);
-    smartYield.liquidateTerm(smartYield.activeTerm());
+    (uint256[] memory indexesToUpKeep) = abi.decode(performData, (uint256[]));
+    
+    // iterate through instances that need upkeep and liquidate them
+    uint256 totalUpKeeps = indexesToUpKeep.length;
+    for (uint256 i; i < totalUpKeeps; i++) {
+      ISmartYield smartYield = ISmartYield(instances[indexesToUpKeep[i]]);
+      smartYield.liquidateTerm(smartYield.activeTerm());
+    }
   }
 
-  function addSmartYield(address _smartYield) external onlyOwner {
-    whitelist[_smartYield] = true;
+  function addInstance(address _smartYield) external onlyOwner {
+    instances.push(_smartYield);
   }
+  
+  function removeInstance(address _smartYield) external onlyOwner {
+    uint256 totalInstances = instances.length;
+    for (uint256 i; i < totalInstances; i++) {
+      if (instances[i] == _smartYield) {
+        
+        // delete the smart yield instance from the list
+        instances[i] = instances[totalInstances - 1];
+        instances.pop();
 
-  function removeSmartYield(address _smartYield) external onlyOwner {
-    whitelist[_smartYield] = false;
+      }
+    }
   }
-
 }
