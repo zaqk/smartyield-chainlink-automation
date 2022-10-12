@@ -21,14 +21,14 @@ contract SYV2TermLiquidation is AutomationCompatible, Owned {
   ) {
     address[] memory termsToLiquidate;
 
-    // iterate through providers and check for terms that can be liquidated
+    /// iterate through providers and check for terms that can be liquidated
     uint256 totalProviders = providers.length;
     for (uint256 i; i < totalProviders; i++) {
       address provider = providers[i];
       (,,,address activeTerm,,) = smartYield.poolByProvider(provider);
       (,uint256 end,,,,,bool liquidated) = smartYield.getTermInfo(activeTerm);
 
-      // check if term can be liquidated
+      /// add term to perfromData if it can be liquidated
       if (block.timestamp > end && !liquidated) {
         termsToLiquidate[termsToLiquidate.length - 1] = activeTerm;
       }
@@ -43,13 +43,12 @@ contract SYV2TermLiquidation is AutomationCompatible, Owned {
   function performUpkeep(bytes calldata performData) external {
     address[] memory termsToLiquidate = abi.decode(performData, (address[]));
 
-    // iterate through each term in perform data and liquidate
+    /// iterate through each term in performData and liquidate
     uint256 totalTermsToLiquidate = termsToLiquidate.length;
     for (uint256 i; i < totalTermsToLiquidate; i++) {
-      smartYield.liquidateTerm(termsToLiquidate[i]);
-
+      address term = termsToLiquidate[i];
+      smartYield.liquidateTerm(term);
     }
-
   }
 
   function addProvider(address _provider) external onlyOwner {
@@ -62,12 +61,11 @@ contract SYV2TermLiquidation is AutomationCompatible, Owned {
 
       if (providers[i] == _provider) {
 
-        // replace provider with provider at end of list to delete
+        /// replace provider with provider at end of list to delete
         address lastProvider = providers[totalProviders - 1];
         providers[i] = lastProvider;
         providers.pop();
       }
     }
   }
-
 }
