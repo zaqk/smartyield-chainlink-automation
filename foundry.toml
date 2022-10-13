@@ -4,13 +4,6 @@ solc_version = '0.8.15'
 auto_detect_solc = false
 optimizer_runs = 1_000
 
-[profile.test]
+[profile.ci]
 eth_rpc_url = 'https://rpc.ankr.com/eth'
 fork_block_number = 15460423
-
-[profile.test.fuzz]
-runs = 1_000
-
-# Extreme Fuzzing CI Profile :P
-[profile.test.fuzz.ci]
-runs = 100_000

@@ -14,17 +14,11 @@ contract SYV1TermLiquidation is AutomationCompatible {
     smartYield = _smartYield;
   }
 
-  function checkUpkeep(bytes calldata) external cannotExecute returns (
+  function checkUpkeep(bytes calldata) external pure override returns (
     bool upkeepNeeded,
-    bytes memory performData
+    bytes memory
   ) {
-    address activeTerm = smartYield.activeTerm();
-    (,uint256 end,,,,,bool liquidated) = smartYield.bondData(activeTerm);
-
-    return (
-      block.timestamp > end && !liquidated,
-      new bytes(0) // no performData needed
-    );
+    return (true, "");
   }
 
   function performUpkeep(bytes calldata) external {

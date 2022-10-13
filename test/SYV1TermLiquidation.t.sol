@@ -38,24 +38,9 @@ contract SYV1TermLiquidationTest is Test {
   }
 
   function testCorrectness_checkUpkeep() public {
-    // assert false is returned when term is still running
-    vm.prank(address(0), address(0));
+    // should always return true
     (bool isReady,) = automation.checkUpkeep(new bytes(0));
-    assertFalse(isReady);
-
-    // assert true is returned when term is no longer running
-    vm.warp(endTime + 1 days);
-    vm.prank(address(0), address(0));
-    (isReady,) = automation.checkUpkeep(new bytes(0));
     assertTrue(isReady);
-
-    // liquidate active term
-    smartYield.liquidateTerm(smartYield.activeTerm());
-
-    // assert false is returned when term has already been liquidated
-    vm.prank(address(0), address(0));
-    (isReady,) = automation.checkUpkeep(new bytes(0));
-    assertFalse(isReady);
   }
 
   function testCorrectness_performUpkeep() public {
