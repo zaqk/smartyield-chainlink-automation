@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.15;
 
+// smart yield with aave v2 as originator
+
 interface ISmartYield {
   function activeTerm() external returns (address);
   function bondData(address _term) external returns (

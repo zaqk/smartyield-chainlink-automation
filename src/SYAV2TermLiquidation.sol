@@ -3,10 +3,10 @@ pragma solidity ^0.8.15;
 
 import {AutomationCompatible} from "chainlink/AutomationCompatible.sol";
 
-import {ISmartYield} from "./external/ISmartYield.v1.sol";
+import {ISmartYield} from "./external/ISmartYield.av2.sol";
 
-/// @title Smart Yield V1 Term Liquidation
-contract SYV1TermLiquidation is AutomationCompatible {
+/// @title Smart Yield Aave V2 Originator Term Liquidation
+contract SYAV2TermLiquidation is AutomationCompatible {
 
   ISmartYield public smartYield;
 

@@ -4,8 +4,8 @@ pragma solidity ^0.8.15;
 import "forge-std/Test.sol";
 import {console2} from "forge-std/console2.sol";
 
-import {ISmartYield} from "src/external/ISmartYield.v1.sol";
-import {SYV1TermLiquidation} from "src/SYV1TermLiquidation.sol";
+import {ISmartYield} from "src/external/ISmartYield.av2.sol";
+import {SYAV2TermLiquidation} from "src/SYAV2TermLiquidation.sol";
 
 import {UserFactory} from "./lib/UserFactory.sol";
 
@@ -13,7 +13,7 @@ contract SYV1TermLiquidationTest is Test {
 
   address constant smartYieldAddr = 0xa0b3d2AF5a37CDcEdA1af38b58897eCB30Feaa1A;
 
-  SYV1TermLiquidation automation;
+  SYAV2TermLiquidation automation;
   ISmartYield smartYield;
 
   // test addresses
@@ -26,7 +26,7 @@ contract SYV1TermLiquidationTest is Test {
 
   function setUp() public {
     smartYield = ISmartYield(smartYieldAddr);
-    automation = new SYV1TermLiquidation(smartYield);
+    automation = new SYAV2TermLiquidation(smartYield);
     
     address[] memory testAddresses = new UserFactory().create(1);
     addr = testAddresses[0];

@@ -4,10 +4,10 @@ pragma solidity ^0.8.15;
 import {AutomationCompatible} from "chainlink/AutomationCompatible.sol";
 import {Owned} from "solmate/auth/Owned.sol";
 
-import {ISmartYield} from "./external/ISmartYield.v2.sol";
+import {ISmartYield} from "./external/ISmartYield.sol";
 
-/// @title Smart Yield  V2 Term Liquidation
-contract SYV2TermLiquidation is AutomationCompatible, Owned {
+/// @title Smart Yield V2 Term Liquidation
+contract SYTermLiquidation is AutomationCompatible, Owned {
   ISmartYield public smartYield;
   address[] providers;
 

@@ -4,7 +4,7 @@
 source .env
 
 # Run the script with interactive inputs
-forge script script/DeploySYV1.s.sol:DeploySYV1 --sig "runGoerli()(address)" \
+forge script script/DeploySYAV2.s.sol:DeploySYAV2 --sig "run()(address)" \
     --rpc-url $RPC_URL \
     --broadcast \
     -vvvv \

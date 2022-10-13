@@ -15,7 +15,7 @@ echo Running Script:
 
 # We specify the anvil url as http://localhost:8545
 # We need to specify the sender for our local anvil node
-forge script script/DeploySYV1.s.sol:DeploySYV1 --sig "run()(address)"\
+forge script script/DeploySYAV2.s.sol:DeploySYAV2 --sig "run()(address)"\
     --fork-url http://localhost:8545 \
     --broadcast \
     -vvvv \
