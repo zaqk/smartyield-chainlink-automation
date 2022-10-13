@@ -6,7 +6,7 @@ import {SYAV2TermLiquidation} from "src/SYAV2TermLiquidation.sol";
 import {ISmartYield} from "src/external/ISmartYield.av2.sol";
 
 /// @notice Deploy script for SYV1TermLiquidation
-contract DeploySYVAV2 is Script {
+contract DeploySYAV2 is Script {
     address constant smartYieldAddr = 0xa0b3d2AF5a37CDcEdA1af38b58897eCB30Feaa1A;
 
     address constant smartYieldAddrGoerli = 0x03481E31064f0Babd6bF3E7FD5F3E320F31141d4;
