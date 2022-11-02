@@ -68,4 +68,8 @@ contract SYTermLiquidation is AutomationCompatible, Owned {
       }
     }
   }
+
+  function setSmartYield(ISmartYield _smartYield) external onlyOwner {
+    smartYield = _smartYield;
+  }
 }
