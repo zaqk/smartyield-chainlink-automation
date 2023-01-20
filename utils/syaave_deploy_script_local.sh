@@ -8,19 +8,18 @@ echo Please wait a few seconds for anvil to fork mainnet and run locally...
 anvil --fork-url $RPC_URL &
 
 # Wait for anvil to fork
-sleep 5
+sleep 10
 
 # Run the script
 echo Running Script:
 
 # We specify the anvil url as http://localhost:8545
 # We need to specify the sender for our local anvil node
-forge script script/DeploySYAV2.s.sol:DeploySYAV2 --sig "run()(address)"\
+forge script script/DeploySYAave.s.sol:DeploySYAave --sig "runArbitrum()(address)"\
     --fork-url http://localhost:8545 \
     --broadcast \
     -vvvv \
-    --sender 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 \
-    --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 \
+    --private-key $DEPLOYER_KEY \
     $args
 
 # Once finished, we want to kill our anvil instance running in the background

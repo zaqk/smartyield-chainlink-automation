@@ -17,10 +17,15 @@ jobs:
       - name: Install Dependencies
         run: forge install
 
-      - name: Run Tests
+      - name: Run mainnet tests
         run: forge test
         env:
-          FOUNDRY_PROFILE: ci
+          FOUNDRY_PROFILE: ci_mainnet
+
+      - name: Run arbitrum tests
+        run: forge test
+        env:
+          FOUNDRY_PROFILE: ci_arbitrum
 
   scripts:
     strategy:

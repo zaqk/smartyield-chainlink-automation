@@ -4,20 +4,22 @@ pragma solidity ^0.8.15;
 import "forge-std/Test.sol";
 import {console2} from "forge-std/console2.sol";
 
-import {ISmartYield} from "src/external/ISmartYield.av2.sol";
-import {SYAV2TermLiquidation} from "src/SYAV2TermLiquidation.sol";
+import {ISmartYieldAave} from "src/external/ISmartYieldAave.sol";
+import {SYAaveTermLiquidation} from "src/SYAaveTermLiquidation.sol";
 
-import {UserFactory} from "./lib/UserFactory.sol";
+import {console2} from "forge-std/console2.sol";
 
-contract SYV1TermLiquidationTest is Test {
+contract SYAaveTermLiquidationTest is Test {
 
-  address constant smartYieldAddr = 0xa0b3d2AF5a37CDcEdA1af38b58897eCB30Feaa1A;
+  function smartYieldAddr() public virtual returns (address) {
+    console2.log("block.chainId", block.chainid);
+    if (block.chainid == 1) return 0x8A897a3b2dd6756fF7c17E5cc560367a127CA11F;
+    else if (block.chainid == 42161) return 0x1ADDAbB3fAc49fC458f2D7cC24f53e53b290d09e;
+    else revert("unsupported chain");
+  }
 
-  SYAV2TermLiquidation automation;
-  ISmartYield smartYield;
-
-  // test addresses
-  address addr;
+  SYAaveTermLiquidation automation;
+  ISmartYieldAave smartYield;
 
   uint256 startTime;
   uint256 endTime;
@@ -25,11 +27,8 @@ contract SYV1TermLiquidationTest is Test {
   address nextTerm;
 
   function setUp() public {
-    smartYield = ISmartYield(smartYieldAddr);
-    automation = new SYAV2TermLiquidation(smartYield);
-    
-    address[] memory testAddresses = new UserFactory().create(1);
-    addr = testAddresses[0];
+    smartYield = ISmartYieldAave(smartYieldAddr());
+    automation = new SYAaveTermLiquidation(smartYield);
 
     // load current term data
     (startTime,endTime,,nextTerm,,,) = smartYield.bondData(
@@ -45,7 +44,7 @@ contract SYV1TermLiquidationTest is Test {
 
   function testCorrectness_performUpkeep() public {
     bytes memory selector = abi.encodeWithSelector(
-      ISmartYield.liquidateTerm.selector,
+      ISmartYieldAave.liquidateTerm.selector,
       smartYield.activeTerm()
     );
 

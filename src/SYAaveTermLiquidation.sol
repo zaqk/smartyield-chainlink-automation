@@ -1,16 +1,17 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.15;
 
+import {Owned} from "solmate/auth/Owned.sol";
 import {AutomationCompatible} from "chainlink/AutomationCompatible.sol";
 
-import {ISmartYield} from "./external/ISmartYield.av2.sol";
+import {ISmartYieldAave} from "./external/ISmartYieldAave.sol";
 
 /// @title Smart Yield Aave V2 Originator Term Liquidation
-contract SYAV2TermLiquidation is AutomationCompatible {
+contract SYAaveTermLiquidation is AutomationCompatible, Owned {
 
-  ISmartYield public smartYield;
+  ISmartYieldAave public smartYield;
 
-  constructor(ISmartYield _smartYield) {
+  constructor(ISmartYieldAave _smartYield) Owned(msg.sender) {
     smartYield = _smartYield;
   }
 
@@ -24,6 +25,10 @@ contract SYAV2TermLiquidation is AutomationCompatible {
   function performUpkeep(bytes calldata) external {
     address activeTerm = smartYield.activeTerm();
     smartYield.liquidateTerm(activeTerm);
+  }
+
+  function updateSmartYield(ISmartYieldAave _smartYield) external onlyOwner {
+    smartYield = _smartYield;
   }
 
 }

@@ -3,7 +3,7 @@ pragma solidity ^0.8.15;
 
 // smart yield with aave v2 as originator
 
-interface ISmartYield {
+interface ISmartYieldAave {
   function activeTerm() external returns (address);
   function bondData(address _term) external returns (
     uint256 start,
