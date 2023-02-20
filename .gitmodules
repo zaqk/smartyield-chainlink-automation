@@ -9,3 +9,6 @@
 	path = lib/chainlink
 	url = https://github.com/smartcontractkit/chainlink
 	branch = develop
+[submodule "lib/v3-periphery"]
+	path = lib/v3-periphery
+	url = https://github.com/Uniswap/v3-periphery
