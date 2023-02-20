@@ -17,7 +17,9 @@ interface ISmartYield {
     address nextTerm,
     address bond,
     uint256 realizedYield,
+    uint256 depositCap,
     bool liquidated
   );
-  function liquidateTerm(address _term) external;
+  function liquidateTerm(address _term, uint256[] calldata amountOutMins) external;
+  function preHarvest(address _provider) external;
 }

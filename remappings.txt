@@ -1,4 +1,6 @@
 chainlink/=lib/chainlink/contracts/src/v0.8/
+velodrome/=lib/velodrome/
+uniswap-v3-periphery=lib/v3-periphery/
 ds-test/=lib/solmate/lib/ds-test/src/
 forge-std/=lib/forge-std/src/
 solmate/=lib/solmate/src/
