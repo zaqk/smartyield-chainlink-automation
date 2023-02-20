@@ -3,11 +3,11 @@ pragma solidity ^0.8.15;
 
 import {AutomationCompatible} from "chainlink/automation/AutomationCompatible.sol";
 
-import {Router as VeloRouter} from "velodrome/contracts/Router.sol";
 import {IQuoterV2} from "uniswap-v3-periphery/contracts/interfaces/IQuoterV2.sol";
 import {Owned} from "solmate/auth/Owned.sol";
 import {ERC20} from "solmate/tokens/ERC20.sol";
 
+import {IVeloRouter} from "./external/IVeloRouter.sol";
 import {IProvider} from "./external/IProvider.sol";
 import {ISmartYield} from "./external/ISmartYield.sol";
 
@@ -20,6 +20,7 @@ contract SYTermLiquidation is AutomationCompatible, Owned {
   ProviderInfo[] public providers;
   address public keeperRegistry;
   IQuoterV2 public immutable quoter;
+  IVeloRouter public immutable veloRouter;
   uint256 public constant MAX_SLIPPAGE = 10_000;
 
   enum SwapType {
@@ -43,11 +44,13 @@ contract SYTermLiquidation is AutomationCompatible, Owned {
   constructor(
     ISmartYield _smartYield,
     IQuoterV2 _quoter,
+    IVeloRouter _veloRouter,
     address _keeperRegistry,
     address _owner
   ) Owned(_owner) {
     smartYield = _smartYield;
     quoter = _quoter;
+    veloRouter = _veloRouter;
     keeperRegistry = _keeperRegistry;
   }
 
@@ -102,13 +105,13 @@ contract SYTermLiquidation is AutomationCompatible, Owned {
       }
 
     } else if (provider.swapType == SwapType.VELO) {
-      VeloRouter.route[] memory rewardRoute = IVeloProvider(provider).getRewardToUnderlyingRoute();
+      IVeloRouter.route[] memory rewardRoute = IVeloProvider(provider).getRewardToUnderlyingRoute();
       address reward = IVeloProvider(provider).rewards(0); // veloprovider was built for only one reward
       amountOutMins_ = new uint256[](1);
 
       uint256 amountIn = ERC20(reward).balanceOf(address(provider));
 
-      uint256[] memory amountOuts = router.getAmountsOut(amountIn, rewardRoute);
+      uint256[] memory amountOuts = veloRouter.getAmountsOut(amountIn, rewardRoute);
 
       uint256 amountOut = amountOuts[amountOuts.length - 1];
 
