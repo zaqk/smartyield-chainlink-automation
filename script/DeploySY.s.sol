@@ -11,7 +11,5 @@ contract DeploySY is Script {
 
   /// @notice The main script entrypoint
   function run() external {
-    vm.broadcast();
-    new SYTermLiquidation(ISmartYield(address(0)), tx.origin);
   }
 }

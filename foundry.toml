@@ -1,13 +1,13 @@
 # The Default Profile
 [profile.default]
-solc_version = '0.8.17'
+solc_version = '0.8.18'
 auto_detect_solc = false
 optimizer_runs = 1_000
 
 [profile.ci_mainnet]
 eth_rpc_url = 'https://rpc.ankr.com/eth'
-fork_block_number = 16448815
+fork_block_number = 16678309
 
 [profile.ci_arbitrum]
 eth_rpc_url = 'https://rpc.ankr.com/arbitrum'
-fork_block_number = 54308474
+fork_block_number = 63163259

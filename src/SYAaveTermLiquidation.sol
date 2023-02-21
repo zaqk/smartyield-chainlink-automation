@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import {Owned} from "solmate/auth/Owned.sol";
-import {AutomationCompatible} from "chainlink/AutomationCompatible.sol";
+import {AutomationCompatible} from "chainlink/automation/AutomationCompatible.sol";
 
 import {ISmartYieldAave} from "./external/ISmartYieldAave.sol";
 

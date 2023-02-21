@@ -12,7 +12,6 @@ import {console2} from "forge-std/console2.sol";
 contract SYAaveTermLiquidationTest is Test {
 
   function smartYieldAddr() public virtual returns (address) {
-    console2.log("block.chainId", block.chainid);
     if (block.chainid == 1) return 0x8A897a3b2dd6756fF7c17E5cc560367a127CA11F;
     else if (block.chainid == 42161) return 0x1ADDAbB3fAc49fC458f2D7cC24f53e53b290d09e;
     else revert("unsupported chain");
