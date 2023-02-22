@@ -77,7 +77,7 @@ contract SYTermLiquidation is AutomationCompatible, Owned {
 
       if (!provider.active) continue;
 
-      (,,,address activeTerm,,) = smartYield.poolByProvider(provider.addr);
+      (,,address activeTerm,,) = smartYield.poolByProvider(provider.addr);
       (,uint256 end,,,,,,bool liquidated) = smartYield.getTermInfo(activeTerm);
 
       // if term can be liquidated
@@ -103,6 +103,9 @@ contract SYTermLiquidation is AutomationCompatible, Owned {
       // calculate amountOutMins for each reward token
       for (uint256 i; i < rewards.length; i++) {
         uint256 amountIn = ERC20(rewards[i].token).balanceOf(_provider.addr);
+
+        if (amountIn == 0) continue;
+
         (uint256 amountOut,,,) = quoter.quoteExactInput(rewards[i].toNativePath, amountIn);
         amountOutMins_[i] = amountOut * uint256(_provider.slippage) / MAX_SLIPPAGE;
       }
@@ -113,6 +116,8 @@ contract SYTermLiquidation is AutomationCompatible, Owned {
       amountOutMins_ = new uint256[](1);
 
       uint256 amountIn = ERC20(reward).balanceOf(_provider.addr);
+
+      if (amountIn == 0) return amountOutMins_; // no rewards to swap
 
       uint256[] memory amountOuts = veloRouter.getAmountsOut(amountIn, rewardRoute);
 
@@ -141,7 +146,10 @@ contract SYTermLiquidation is AutomationCompatible, Owned {
 
     // remove last index of the list
     providers.pop();
+  }
 
+  function toggleProvider(uint256 _index) external onlyOwner {
+    providers[_index].active = !providers[_index].active;
   }
 
   function setSmartYield(ISmartYield _smartYield) external onlyOwner {

@@ -1,21 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity ^0.8.15;
+pragma solidity >=0.8.0;
 
 import "forge-std/Test.sol";
 import {console2} from "forge-std/console2.sol";
+import {TestUtils} from "test/util/TestUtils.sol";
 
 import {ISmartYieldAave} from "src/external/ISmartYieldAave.sol";
 import {SYAaveTermLiquidation} from "src/SYAaveTermLiquidation.sol";
 
-import {console2} from "forge-std/console2.sol";
-
 contract SYAaveTermLiquidationTest is Test {
-
-  function smartYieldAddr() public virtual returns (address) {
-    if (block.chainid == 1) return 0x8A897a3b2dd6756fF7c17E5cc560367a127CA11F;
-    else if (block.chainid == 42161) return 0x1ADDAbB3fAc49fC458f2D7cC24f53e53b290d09e;
-    else revert("unsupported chain");
-  }
 
   SYAaveTermLiquidation automation;
   ISmartYieldAave smartYield;
@@ -26,7 +19,7 @@ contract SYAaveTermLiquidationTest is Test {
   address nextTerm;
 
   function setUp() public {
-    smartYield = ISmartYieldAave(smartYieldAddr());
+    smartYield = ISmartYieldAave(TestUtils.getSmartYieldAaveAddr());
     automation = new SYAaveTermLiquidation(smartYield);
 
     // load current term data

@@ -11,3 +11,8 @@ fork_block_number = 16678309
 [profile.ci_arbitrum]
 eth_rpc_url = 'https://rpc.ankr.com/arbitrum'
 fork_block_number = 63163259
+
+[profile.ci_optimism]
+eth_rpc_url = 'https://rpc.ankr.com/optimism'
+fork_block_number = 76018691
+match_path = 'test/SyTermLiquidation.t.sol'

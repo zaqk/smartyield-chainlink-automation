@@ -2,10 +2,9 @@
 pragma solidity ^0.8.0;
 
 interface ISmartYield {
-  function poolByProvider(address _provider) external returns (
+  function poolByProvider(address _provider) external view returns (
     address underlying,
     uint256 liquidityProviderBalance,
-    uint256 withdrawWindow,
     address activeTerm,
     uint256 healthFactorGuard,
     uint256 nextDebtId

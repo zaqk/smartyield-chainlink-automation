@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 
 interface IVeloRouter {
   struct Route {
-      address tokenIn;
-      address tokenOut;
-      uint24 fee;
+      address from;
+      address to;
+      bool stable;
   }
   
   function getAmountsOut(

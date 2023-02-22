@@ -27,6 +27,12 @@ jobs:
         env:
           FOUNDRY_PROFILE: ci_arbitrum
 
+      - name: Run optimism tests
+        run: forge test --fork-url "$OPTIMISM_URL"
+        env:
+          OPTIMISM_URL: ${{ secrets.OPTIMISM_URL }}
+          FOUNDRY_PROFILE: ci_optimism
+
   scripts:
     strategy:
       fail-fast: true
