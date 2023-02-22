@@ -10,7 +10,7 @@ import {IVeloRouter} from "src/external/IVeloRouter.sol";
 
 import {SYTermLiquidation} from "src/SYTermLiquidation.sol";
 
-/// @notice Deploy script for SYV1TermLiquidation
+/// @notice Deploy script for SYTermLiquidation
 contract DeploySY is Script {
 
   ISmartYield smartYield = ISmartYield(address(0));
