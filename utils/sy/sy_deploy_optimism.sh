@@ -4,7 +4,7 @@
 source .env
 
 # Run the script with interactive inputs
-forge script script/DeploySY.s.sol:DeploySY --sig "run()()" \
+forge script script/DeploySY.s.sol:DeploySY --sig "runOptimism()(address)" \
     --rpc-url $RPC_URL \
     --broadcast \
     -vvvv \

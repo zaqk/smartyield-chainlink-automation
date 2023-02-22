@@ -13,22 +13,40 @@ import {SYTermLiquidation} from "src/SYTermLiquidation.sol";
 /// @notice Deploy script for SYTermLiquidation
 contract DeploySY is Script {
 
-  ISmartYield smartYield = ISmartYield(address(0));
-  IQuoterV2 quoter = IQuoterV2(address(0));
-  IVeloRouter veloRouter = IVeloRouter(address(0));
-  address keeperRegistry = address(0);
-  address owner = address(0);
 
-
-  /// @notice The main script entrypoint
+  /// @notice mainnet deployment
   function run() external returns (SYTermLiquidation){
     vm.broadcast();
     return new SYTermLiquidation(
-      smartYield,
-      quoter,
-      veloRouter,
-      keeperRegistry,
-      owner
+      ISmartYield(address(0)),
+      IQuoterV2(0x61fFE014bA17989E743c5F6cB21bF9697530B21e),
+      IVeloRouter(address(0)),
+      address(0),
+      address(0)
+    );
+  }
+
+  /// @notice arbitrum deployment
+  function runArbitrum() external returns (SYTermLiquidation){
+    vm.broadcast();
+    return new SYTermLiquidation(
+      ISmartYield(address(0)),
+      IQuoterV2(0x61fFE014bA17989E743c5F6cB21bF9697530B21e),
+      IVeloRouter(address(0)),
+      address(0),
+      address(0)
+    );
+  }
+
+  /// @notice optimism deployment
+  function runOptimism() external returns (SYTermLiquidation){
+    vm.broadcast();
+    return new SYTermLiquidation(
+      ISmartYield(address(0)),
+      IQuoterV2(0x61fFE014bA17989E743c5F6cB21bF9697530B21e),
+      IVeloRouter(0x9c12939390052919aF3155f41Bf4160Fd3666A6f),
+      address(0),
+      address(0)
     );
   }
 }
