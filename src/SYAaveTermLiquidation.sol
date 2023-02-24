@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity ^0.8.15;
+pragma solidity 0.8.18;
 
 import {Owned} from "solmate/auth/Owned.sol";
 import {AutomationCompatible} from "chainlink/automation/AutomationCompatible.sol";
